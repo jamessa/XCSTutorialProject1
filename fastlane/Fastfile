@@ -2,8 +2,41 @@ fastlane_version "1.17.1"
 default_platform :ios
 platform :ios do
 
-  lane :prebuild do
+  lane :prebuild_local do
+  	prebuild(is_xcs: false)
+  end
+
+  lane :prebuild_server do
+    prebuild(is_xcs: true)
+  end
+
+  private_lane :prebuild do |params|
+
     cocoapods
+
+  	is_xcs = params[:is_xcs]
+  	ENV['SIGH_OUTPUT_PATH'] = is_xcs ? "/Library/Developer/XcodeServer/ProvisioningProfiles" : "/tmp"
+  	ENV['SIGH_USERNAME'] = "honzadvorsky@icloud.com"
+
+  	sigh_udid_app_appstore = sigh(
+  		app_identifier: "com.honzadvorsky.XCSTutorialProject1", 
+  		provisioning_name: "tutorial_app_appstore"
+  		)
+	ENV["PROFILE_UDID_APP_APPSTORE"] = sigh_udid_app_appstore
+
+  	sigh_udid_app_adhoc = sigh(
+  		app_identifier: "com.honzadvorsky.XCSTutorialProject1", 
+  		provisioning_name: "tutorial_app_adhoc",
+  		adhoc: true
+  		)
+	ENV["PROFILE_UDID_APP_ADHOC"] = sigh_udid_app_adhoc
+
+  	sigh_udid_app_dev = sigh(
+  		app_identifier: "com.honzadvorsky.XCSTutorialProject1", 
+  		provisioning_name: "tutorial_app_adhoc",
+  		development: true
+  		)
+	ENV["PROFILE_UDID_APP_DEV"] = sigh_udid_app_dev
   end
 
   lane :postbuild do
