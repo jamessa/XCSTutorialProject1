@@ -1,8 +1,9 @@
-fastlane_version "1.17.1"
+fastlane_version "1.20.0"
 default_platform :ios
 platform :ios do
 
   lane :prebuild do
+  	copy_provisioning_profiles
     cocoapods
   end
 
@@ -11,6 +12,48 @@ platform :ios do
     #   message: "Xcode Bot reporting success."
     # )
     say "Xcode Bot reporting success."
+  end
+
+  private_lane :copy_provisioning_profiles do
+  	sh "cd .. && cp ProvisioningProfiles/* /Library/Developer/XcodeServer/ProvisioningProfiles/"
+  end
+
+  # since more targets have XCSTutorialProject1 in them, we need an exact match here by starting with ^ and ending with $
+  def exact(string)
+  	return "^#{string}$"
+  end
+
+  lane :provision do
+
+  	# create a folder for provisioning profiles
+  	sh "cd .. && mkdir -p ProvisioningProfiles"
+
+  	ENV['SIGH_APP_IDENTIFIER'] = "com.honzadvorsky.XCSTutorialProject1"
+  	ENV['SIGH_TEAM_NAME'] = "Jan Dvorsky"
+  	ENV['SIGH_USERNAME'] = "honzadvorsky@icloud.com"
+  	ENV['SIGH_OUTPUT_PATH'] = "./ProvisioningProfiles"
+
+  	ENV['FL_PROJECT_PROVISIONING_PROJECT_PATH'] = "XCSTutorialProject1.xcodeproj"
+
+  	# development
+  	sigh(
+  		provisioning_name: "tutorial_app_development",
+  		development: true
+  		)
+  	update_project_provisioning(
+	  target_filter: exact("XCSTutorialProject1"), 
+	  build_configuration: exact("Debug")
+	)
+
+  	# appstore (default, no 'development' or 'adhoc' flag)
+  	sigh(
+  		provisioning_name: "tutorial_app_appstore",
+  		)
+  	update_project_provisioning(
+	  target_filter: exact("XCSTutorialProject1"),
+	  build_configuration: exact("Release")
+	)
+
   end
   
 end
