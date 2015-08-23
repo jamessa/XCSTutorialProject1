@@ -4,7 +4,7 @@ platform :ios do
 
   lane :prebuild do
   	copy_provisioning_profiles
-    cocoapods
+    #cocoapods
   end
 
   lane :postbuild do
