@@ -45,14 +45,24 @@ platform :ios do
 	  build_configuration: exact("Debug")
 	)
 
+    # adhoc
+    sigh(
+      provisioning_name: "tutorial_app_adhoc",
+      adhoc: true
+      )
+    update_project_provisioning(
+    target_filter: exact("XCSTutorialProject1"), 
+    build_configuration: exact("Release")
+  )
+
   	# appstore (default, no 'development' or 'adhoc' flag)
   	sigh(
   		provisioning_name: "tutorial_app_appstore",
   		)
-  	update_project_provisioning(
-	  target_filter: exact("XCSTutorialProject1"),
-	  build_configuration: exact("Release")
-	)
+ #  	update_project_provisioning(
+	#   target_filter: exact("XCSTutorialProject1"),
+	#   build_configuration: exact("Release")
+	# )
 
   end
   

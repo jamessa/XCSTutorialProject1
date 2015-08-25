@@ -417,7 +417,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.XCSTutorialProject1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "19a20bfe-f2f0-4fb2-a856-7d2e931a552f";
+				PROVISIONING_PROFILE = "47583ae7-d983-4289-ae33-5af182bb5e2c";
 			};
 			name = Release;
 		};
